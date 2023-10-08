@@ -6,11 +6,14 @@ import vue3Cookies from 'vue3-cookies'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import '../src/assets/css/globalStyles.css'
 
+
 const app = createApp(App)
 
 app.use(router)
-app.use(vue3GoogleLogin, {clientId: process.env.VUE_APP_GOOGLE_CLIENT_ID})
-app.use(vue3Cookies,{
+app.use(vue3GoogleLogin, {
+    clientId: process.env.VUE_APP_GOOGLE_CLIENT_ID
+})
+app.use(vue3Cookies, {
     expireTimes: "1d", // 24 hours
     path: "/", //we want them to work everywhere in the site
     domain: "",  //we want them to work globally

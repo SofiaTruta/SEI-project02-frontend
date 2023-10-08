@@ -5,7 +5,11 @@
 </template>
 
 <script>
+
 export default {
-    name: 'navBar'
+    name: 'navBar',
+    data: () => ({
+
+    })
 }
 </script>
