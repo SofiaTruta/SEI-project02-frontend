@@ -1,28 +1,38 @@
 <template>
     <div v-if="editAppointmentData">
-        <form class="edit-appointment-container">
-            <label for="edit-appointment-date">Date</label>
-            <input type="date" v-model="editAppointmentData.date" name="edit-appointment-date" id="edit-appointment-date">
+        <v-form>
+        <v-container>
+            <v-row>
+                <v-col cols="12" md="6">
+                    <v-text-field v-model="editAppointmentData.date" label="Date" type="date" required></v-text-field>
+                </v-col>
 
-            <label for="edit-appointment-time">Time</label>
-            <input type="text" v-model="editAppointmentData.time" name="edit-appointment-time" id="edit-appointment-time"
-                placeholder="17:00">
+                <v-col cols="12" md="6">
+                    <v-text-field v-model="editAppointmentData.time" label="Time" type="time" required></v-text-field>
+                </v-col>
 
-            <label for="edit-appointment-name">Patient Name</label>
-            <input type="text" v-model="editAppointmentData.patientDetails.name" name="edit-appointment-name"
-                id="edit-appointment-name" placeholder="Jane Doe">
+                <v-col cols="12">
+                    <v-text-field v-model="editAppointmentData.patientDetails.name" label="Patient Name" type="text"
+                        required></v-text-field>
+                </v-col>
 
-            <label for="edit-appointment-dateOfBirth">Patient's date of birth</label>
-            <input type="date" v-model="editAppointmentData.patientDetails.dateOfBirth" name="edit-appointment-dateOfBirth"
-                id="edit-appointment-dateOfBirth" placeholder="patient's date of birth">
+                <v-col cols="12" md="6">
+                    <v-text-field v-model="editAppointmentData.patientDetails.dateOfBirth" label="Patient's Date of Birth"
+                        type="date"></v-text-field>
+                </v-col>
 
-            <label for="edit-appointment-treatment">Treatment Plan</label>
-            <input type="textarea" v-model="editAppointmentData.patientDetails.currentTreatment"
-                name="edit-appointment-treatment" id="edit-appointment-treatment" placeholder="treatment details here">
-
-            <button @click="saveEditAppointment(this.appointmentData._id)">save</button>
-            <button>cancel</button>
-        </form>
+                <v-col cols="12">
+                    <v-textarea v-model="editAppointmentData.patientDetails.currentTreatment" label="Treatment Plan"
+                        type="text"></v-textarea>
+                </v-col>
+            </v-row>
+            <v-row>
+                <v-col cols="12">
+                    <v-btn @click="saveEditAppointment(this.appointmentData._id)">Save</v-btn>
+                </v-col>
+            </v-row>
+        </v-container>
+    </v-form>
     </div>
 </template>
 
@@ -34,8 +44,7 @@ export default {
     name: 'editAppointment',
     props: {
         professionalData: {
-            type: Object,
-            required: true
+            type: Object
         },
         appointmentData: {
             type: Object,
@@ -59,14 +68,6 @@ export default {
     },
     methods: {
         async saveEditAppointment(appointmentId) {
-            const isoDate = new Date(this.editAppointmentData.date).toISOString().split('T')[0]
-            this.editAppointmentData.date = isoDate
-
-            const isoDateOfBirth = new Date(this.editAppointmentData.patientDetails.dateOfBirth).toISOString().split('T')[0]
-            this.editAppointmentData.patientDetails.dateOfBirth = isoDateOfBirth
-
-            console.log(isoDate)
-
             try {
                 await fetch(`${EDIT_APPT_API}/${appointmentId}`, {
                     method: 'PUT',
@@ -75,7 +76,9 @@ export default {
                     },
                     body: JSON.stringify(this.editAppointmentData)
                 })
-                // this.appointments.push({})
+                this.$emit('editSaved', this.editAppointmentData)
+                this.$emit('closeEditAppointment');
+            
             } catch (error) {
                 console.log('problems editing appointment frontend', error)
             }

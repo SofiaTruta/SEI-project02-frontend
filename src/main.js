@@ -3,11 +3,27 @@ import App from './App.vue'
 import router from '../router'
 import vue3GoogleLogin from 'vue3-google-login'
 import vue3Cookies from 'vue3-cookies'
-import 'bootstrap/dist/css/bootstrap.min.css'
-import '../src/assets/css/globalStyles.css'
+// import 'bootstrap/dist/css/bootstrap.min.css'
+// import '../src/assets/css/globalStyles.css'
+
+import 'vuetify/styles'
+import { createVuetify } from 'vuetify'
+import * as components from 'vuetify/components'
+import * as directives from 'vuetify/directives'
+
+
+const vuetify = createVuetify({
+  components,
+  directives,
+})
+
+
+import moment from 'moment'
 
 
 const app = createApp(App)
+
+app.config.globalProperties.$moment = moment
 
 app.use(router)
 app.use(vue3GoogleLogin, {
@@ -20,5 +36,6 @@ app.use(vue3Cookies, {
     secure: true, //cookie encrypted by default
     sameSite: "None"
 })
+app.use(vuetify)
 
 app.mount('#app')

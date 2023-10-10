@@ -1,0 +1,21 @@
+.nav-drawer-text {
+    margin-top: 3rem;
+    margin-bottom: 2rem;
+}
+
+/* .nav-drawer-text-item {
+    margin-top: 8vmin;
+} */
+
+.pa-2 {
+    margin-bottom: 5vmin;
+}
+
+.custom-dialog-card{
+    padding: 5%;
+}
+
+.custom-dialog-card h2 {
+    margin-top: 2%;
+    margin-left: 5%;
+}

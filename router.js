@@ -2,6 +2,7 @@ import { createWebHistory, createRouter } from "vue-router";
 
 import landingPage from './src/components/landingPage'
 import mainPage from './src/components/mainPage'
+import singleAppointment from './src/components/singleAppointment'
 
 const routes = [
     {
@@ -13,6 +14,11 @@ const routes = [
         name: 'Home',
         path: '/home',
         component: mainPage
+    },
+    {
+        name: 'Single Appointment',
+        path: '/appointments/:appointmentId',
+        component: singleAppointment
     }
 ]
 

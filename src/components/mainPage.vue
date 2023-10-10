@@ -1,39 +1,54 @@
 <template>
     <div class="main-page-container">
-        <h1>MAIN PAGE</h1>
-        <button @click="createNewAppointment">create new appointment</button>
+        <navBar class="nav-bar" />
 
-        <div v-if="showNewAppointment" class="new-appointment-container">
-            <newAppointment :professionalDetails="professionalData" @new-appointment-created="refreshPatientList" />
-        </div>
+        <div class="main-content">
 
-        <h3>Your Appointments</h3>
-        <div v-if="professionalData">
-            <div v-if="professionalData.appointments">
-                <router-link class="appointment-list" v-for="appointment in professionalData.appointments" :to="'/appointment/' + appointment._id"
-                    :key="appointment.id">
-                    <h4>{{ formatDate(appointment.date) }}</h4>
-                    <h5> {{ appointment.time }}</h5>
-                    <p>Patient Name: {{ appointment?.patientDetails?.name }}</p>
-                    <div v-if="!showNewAppointment">
-                        <button @click="deleteAppointment(appointment._id)">delete</button>
-                        <editAppointment :professionalData="professionalData" :appointmentData="appointment"
-                            v-if="appointment._id === editingAppointmentId" />
-                        <button @click="setEditAppointmentId(appointment._id)">edit</button>
-                    </div>
-                </router-link>
+            <div class="header">
+                <h1>Patient Bookr</h1>
             </div>
-           
+
+            <div v-if="showNewAppointment" class="new-appointment-container">
+                <newAppointment :professionalDetails="professionalData" :showDialog="showNewAppointment" @cancel-appointment="cancelNewAppointment" />
+            </div>
+
+            <div class="appointments-list">
+                <h3>Your Upcoming Appointments</h3>
+                <div v-if="professionalData">
+                    <div v-if="professionalData.appointments">
+
+                        <v-list lines="two">
+                            <v-list-item v-for="appointment in professionalData.appointments" :key="appointment._id"
+                                :to="'/appointments/' + appointment._id">
+                                <template v-slot:default>
+                                    <h4>{{ $moment(appointment.date).format('L') }}</h4>
+                                    <h4>{{ appointment.time }}</h4>
+                                    <p>Patient Name: {{ appointment?.patientDetails?.name }}</p>
+                                </template>
+
+                                <template v-slot:action>
+                                    <div v-if="!showNewAppointment">
+                                        <v-btn icon @click.stop="deleteAppointment(appointment._id)">
+                                            <v-icon>mdi-delete</v-icon>
+                                        </v-btn>
+                                        <v-btn icon @click.stop="setEditAppointmentId(appointment._id)">
+                                            <v-icon>mdi-pencil</v-icon>
+                                        </v-btn>
+                                    </div>
+                                </template>
+                            </v-list-item>
+                        </v-list>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-
-    <navBar />
 </template>
 
 <script>
 import navBar from './navBar.vue'
 import newAppointment from './newAppointment.vue'
-import editAppointment from './editAppointment.vue'
+// import editAppointment from './editAppointment.vue'
 
 
 const PROFESSIONALS_API = 'http://localhost:4000/professionals'
@@ -54,22 +69,22 @@ export default {
             },
             showNewAppointment: false,
             editingAppointmentId: null,
-            // showEditAppointment: false
         }
     },
     components: {
         navBar,
-        newAppointment,
-        editAppointment
+        newAppointment
     },
     mounted() {
         this.fetchProfessionalData()
+    },
+    updated() {
+
     },
     methods: {
         async fetchProfessionalData() {
             //get data from cookie
             const professionalCookies = this.$cookies.get('professional_data');
-            // console.log('raw cookie:', professionalCookies);
 
             //if no cookie, send back to login
             if (!professionalCookies) {
@@ -104,21 +119,12 @@ export default {
                         this.professionalData.appointments.push(appointment)
                     }
                 });
-                console.log(this.professionalData.appointments)
             } catch (error) {
                 console.error('Error fetching data:', error);
             }
         },
         createNewAppointment() {
             this.showNewAppointment = true
-        },
-        formatDate(date) {
-            const options = {
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric'
-            }
-            return new Date(date).toLocaleDateString(undefined, options)
         },
         async deleteAppointment(appointmentId) {
             try {
@@ -133,10 +139,13 @@ export default {
         setEditAppointmentId(appointmentId) {
             this.editingAppointmentId = appointmentId
         },
-        async refreshPatientList() {
-            this.$router.push('/home')
+        cancelNewAppointment() {
+            this.showNewAppointment = false
         }
     }
 }
 
 </script>
+<style scoped>
+@import "../assets/css/mainPage.css";
+</style>

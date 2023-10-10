@@ -1,11 +1,11 @@
 <template>
     <div class="landing-page-container">
-        <div>
+        <div class="intro">
             <h1>Patient Bookr</h1>
             <p>Keep track of your appointments with ease, and never forget a patient again.</p>
         </div>
 
-        <div v-if="isLoggedIn">
+        <div v-if="isLoggedIn" class="buttons-after-login">
             <button><router-link :to="'/home'">Continue to home page</router-link></button>
             <button @click="logOut">Log Out</button>
 
@@ -19,7 +19,6 @@
 
 <script>
 import { decodeCredential, googleLogout } from 'vue3-google-login'
-
 
 const DATA_URL = 'http://localhost:4000/professionals/login'
 
@@ -54,10 +53,10 @@ export default {
                 })
             })
             this.$nextTick(() => {
-                this.$router.push({name: 'Home'})
+                this.$router.push({ name: 'Home' })
             })
         },
-        logOut: function(){
+        logOut: function () {
             googleLogout()
             this.$cookies.remove('professional_data')
             this.isLoggedIn = false
@@ -66,3 +65,6 @@ export default {
 
 }
 </script>
+<style>
+@import "../assets/css/landingPage.css";
+</style>
