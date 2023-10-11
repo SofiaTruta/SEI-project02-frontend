@@ -3,8 +3,6 @@ import App from './App.vue'
 import router from '../router'
 import vue3GoogleLogin from 'vue3-google-login'
 import vue3Cookies from 'vue3-cookies'
-// import 'bootstrap/dist/css/bootstrap.min.css'
-// import '../src/assets/css/globalStyles.css'
 
 import 'vuetify/styles'
 import { createVuetify } from 'vuetify'

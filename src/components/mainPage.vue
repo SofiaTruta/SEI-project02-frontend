@@ -1,6 +1,45 @@
 <template>
+    <v-container>
+      <v-row>
+        <v-col cols="2">
+          <navBar class="nav-bar" @force-update="forceUpdateComponent" />
+        </v-col>
+        <v-col cols="10">
+          <div class="main-content">
+            <div class="header">
+              <h1>Patient Bookr</h1>
+            </div>
+            <div class="appointments-list">
+              <h3>Your Upcoming Appointments</h3>
+              <p>click on each appointment for more details</p>
+              <div v-if="professionalData">
+                <div v-if="professionalData.appointments">
+                  <v-list lines="two">
+                    <v-list-item
+                      v-for="appointment in professionalData.appointments"
+                      :key="appointment._id"
+                      :to="'/appointments/' + appointment._id"
+                      class="custom-list-item"
+                    >
+                      <h4>{{ $moment(appointment.date).format('DD/MM/YYYY') }}</h4>
+                      <h4>{{ appointment.time }}</h4>
+                      <p>Patient Name: {{ appointment?.patientDetails?.name }}</p>
+                      <p>Status: {{ appointment?.status }}</p>
+                    </v-list-item>
+                  </v-list>
+                </div>
+              </div>
+            </div>
+          </div>
+        </v-col>
+      </v-row>
+    </v-container>
+  </template>
+  
+
+<!-- <template>
     <div class="main-page-container">
-        <navBar class="nav-bar" />
+        <navBar class="nav-bar" @force-update="forceUpdateComponent"/>
 
         <div class="main-content">
 
@@ -10,17 +49,20 @@
 
             <div class="appointments-list">
                 <h3>Your Upcoming Appointments</h3>
+                <p>click on each appointment for more details</p>
                 <div v-if="professionalData">
                     <div v-if="professionalData.appointments">
 
                         <v-list lines="two">
-                            <v-list-item v-for="appointment in professionalData.appointments" :key="appointment._id"
-                                :to="'/appointments/' + appointment._id">
-                                <template v-slot:default>
+                            <v-list-item 
+                            v-for="appointment in professionalData.appointments"
+                             :key="appointment._id"
+                                :to="'/appointments/' + appointment._id"
+                                class="custom-list-item">
                                     <h4>{{ $moment(appointment.date).format('DD/MM/YYYY') }}</h4>
                                     <h4>{{ appointment.time }}</h4>
                                     <p>Patient Name: {{ appointment?.patientDetails?.name }}</p>
-                                </template>
+                                    <p>Status: {{ appointment?.status }}</p>
                             </v-list-item>
                         </v-list>
                     </div>
@@ -28,13 +70,14 @@
             </div>
         </div>
     </div>
-</template>
+</template> -->
 
 <script>
 import navBar from './navBar.vue'
 
 const PROFESSIONALS_API = 'http://localhost:4000/professionals'
 const DELETE_APPT_API = 'http://localhost:4000/appointments'
+
 
 export default {
     name: 'mainPage',
@@ -92,7 +135,7 @@ export default {
 
                 //iterate through appointments array and find only the ones for this professional
                 allAppointments.forEach(appointment => {
-                    if (appointment.professionalDetails === professionalId) {
+                    if (appointment.professionalDetails === professionalId && appointment.status === 'upcoming') {
                         this.professionalData.appointments.push(appointment)
                     }
                 });
@@ -115,9 +158,14 @@ export default {
         },
         cancelNewAppointment() {
             this.showNewAppointment = false
+        },
+        forceUpdateComponent(){
+            this.$forceUpdate()
         }
     }
 }
 
 </script>
-<style scoped>@import "../assets/css/mainPage.css";</style>
+<style scoped>
+@import "../assets/css/mainPage.css";
+</style>

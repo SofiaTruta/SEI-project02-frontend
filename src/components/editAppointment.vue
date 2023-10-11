@@ -66,6 +66,9 @@ export default {
             }
         }
     },
+    mounted(){
+
+    },
     methods: {
         async saveEditAppointment(appointmentId) {
             try {

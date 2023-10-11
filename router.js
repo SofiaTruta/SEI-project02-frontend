@@ -3,6 +3,7 @@ import { createWebHistory, createRouter } from "vue-router";
 import landingPage from './src/components/landingPage'
 import mainPage from './src/components/mainPage'
 import singleAppointment from './src/components/singleAppointment'
+import completedAppointments from './src/components/completedAppointments'
 
 const routes = [
     {
@@ -19,6 +20,11 @@ const routes = [
         name: 'Single Appointment',
         path: '/appointments/:appointmentId',
         component: singleAppointment
+    },
+    {
+        name: 'Completed Appointments',
+        path:'/appointments/completed',
+        component: completedAppointments
     }
 ]
 

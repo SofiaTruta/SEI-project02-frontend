@@ -1,4 +1,4 @@
-/* .main-page-container {
+/* .completed-appointments-container {
     display: grid;
     grid-template-columns: 1fr 4fr;
     padding: 20px;
@@ -16,22 +16,16 @@
 }
 
 .header h1 {
+    /* margin-bottom: 1%; */
     font-family: 'Montserrat', sans-serif;
 }
 
-
+.appointments-list {
+    padding-top: 2%;
+}
 
 .appointments-list h3 {
     text-align: center;
-
-}
-
-.appointments-list > p {
-    text-align: center;
     padding-bottom: 2%;
-    margin-top: -1%;
 }
 
-.custom-list-item {
-    margin: 1%; 
-  }

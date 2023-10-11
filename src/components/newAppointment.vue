@@ -3,13 +3,8 @@
         <v-container>
             <v-row>
                 <v-col cols="12" md="6">
-                    <v-tooltip bottom>
-                        <template v-slot:activator="{ on, attrs }">
-                            <v-text-field v-model="newAppointmentData.date" label="Date" type="date" required v-bind="attrs"
-                                v-on="on"></v-text-field>
-                        </template>
-                        <span>Enter the appointment date</span>
-                    </v-tooltip>
+                    <v-text-field v-model="newAppointmentData.date" label="Date" type="date" required v-bind="attrs"
+                        v-on="on"></v-text-field>
                 </v-col>
 
                 <v-col cols="12" md="6">
@@ -25,6 +20,7 @@
                 <v-col cols="12" md="6">
                     <v-text-field v-model="newAppointmentData.patientDetails.dateOfBirth" label="Patient's Date of Birth"
                         type="date"></v-text-field>
+                    <span class="error-message" v-if="dateOfBirthError">Date of birth must be in the past.</span>
                 </v-col>
 
                 <v-col cols="12">
@@ -72,12 +68,22 @@ export default {
                 professionalDetails: {
                     ...this.professionalDetails
                 }
-            }
+            },
+            dateOfBirthError: false
         }
     },
     methods: {
         createNewAppointment() {
             try {
+                //check if dateOfBirth in the past
+                const selectedDateOfBirth = new Date(this.newAppointmentData.patientDetails.dateOfBirth)
+                const today = new Date()
+                if (selectedDateOfBirth >= today) {
+                    this.dateOfBirthError = true
+                    return;
+                }
+                //if no error, proceed
+                this.dateOfBirthError = false;
                 fetch(NEW_APPOINTMENT_API, {
                     method: 'POST',
                     headers: {

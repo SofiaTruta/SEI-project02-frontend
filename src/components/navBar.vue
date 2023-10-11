@@ -10,15 +10,20 @@
                     <v-list-item prepend-icon="mdi-home-circle" class="nav-drawer-text-item"
                         @click="goToHome">Home</v-list-item>
 
+                    <v-list-item prepend-icon="mdi-history" class="nav-drawer-text-item"
+                        @click="goToCompletedAppointments">Completed Appointments</v-list-item>
+
                     <v-list-item @click="openDialog" prepend-icon="mdi-plus-circle" class="nav-drawer-text-item">New
                         Appointment</v-list-item>
 
                 </v-list>
-                <v-dialog v-model="showNewAppointment" @close-appointment="closeDialog"
-                    title="Create New Appointment">
+
+                <!-- dialog opens if showNewAppoint is true -->
+                <v-dialog v-model="showNewAppointment" @close-appointment="closeDialog">
                     <v-card class="custom-dialog-card">
                         <h2>New Appointment</h2>
-                        <newAppointment :professionalDetails="professionalData" :showDialog="showNewAppointment" @close-appointment="closeDialog"/>
+                        <newAppointment :professionalDetails="professionalData" :showDialog="showNewAppointment"
+                            @close-appointment="closeDialog" />
                     </v-card>
                 </v-dialog>
 
@@ -53,6 +58,7 @@ export default {
         },
         showNewAppointment: false
     }),
+    emits: ['force-update'],
     components: {
         logOutButton,
         newAppointment
@@ -90,8 +96,8 @@ export default {
         },
 
         closeDialog() {
-            console.log('trying to close!')
             this.showNewAppointment = false
+            this.$emit('force-update')
         },
         cancelNewAppointment() {
             console.log('received emit!')
@@ -99,6 +105,9 @@ export default {
         },
         goToHome() {
             this.$router.push('/home');
+        },
+        goToCompletedAppointments(){
+            this.$router.push('/appointments/completed');
         }
     }
 }
