@@ -2,20 +2,20 @@
     <div class="single-appointment-container">
         <navBar class="nav-bar" />
         <div class="main-content">
-            <v-sheet :min-height="700" :min-width="700" rounded>
-                <h1>Your Appointment for {{ appointmentData?.patientDetails?.name }}</h1>
-                <h2>{{ $moment(appointmentData?.date).format('L') }}</h2>
-                <h2> {{ appointmentData?.time }}</h2>
-                <h4>Patient's date of birth: {{ $moment(appointmentData?.patientDetails?.dateOfBirth).format('L') }}</h4>
-                <h3>Treatment Notes:</h3>
-                <p>{{ appointmentData?.patientDetails?.currentTreatment }}</p>
+            <v-sheet :min-height="700" :min-width="700" rounded class="pa-4">
+                <h1 class="mt-4 headline">Your Appointment for {{ appointmentData?.patientDetails?.name }}</h1>
+                <h2 class="mb-4 subtitle-1">{{ $moment(appointmentData?.date).format('LL') }}</h2>
+                <h2 class="mb-4 subtitle-1"> {{ appointmentData?.time }}</h2>
+                <h4 class="mb-4 subtitle-2">Patient's date of birth: {{ $moment(appointmentData?.patientDetails?.dateOfBirth).format('DD/MM/YYYY') }}</h4>
+                <h3 class="mb-2 headline">Treatment Notes:</h3>
+                <p class="mb-4 body-1">{{ appointmentData?.patientDetails?.currentTreatment }}</p>
 
-                <v-btn icon @click.stop="deleteAppointment(appointmentData._id)">
-                    <v-icon>mdi-delete</v-icon>
+                <v-btn class="ma-2" @click.stop="deleteAppointment(appointmentData._id)">
+                    <v-icon class="square-icon" icon="mdi-trash-can"></v-icon>
                 </v-btn>
 
-                <v-btn icon @click.stop="showEditing">
-                    <v-icon>mdi-pencil</v-icon>
+                <v-btn  @click.stop="showEditing">
+                    <v-icon class="square-icon" icon="mdi-pencil"></v-icon>
                 </v-btn>
 
                 <div v-if="showEditAppointment">

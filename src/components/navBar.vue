@@ -7,9 +7,6 @@
                     <v-list-item prepend-icon="mdi-account" title="Professional:">{{ professionalData.name
                     }}</v-list-item>
 
-                    <!-- <v-list-item prepend-icon="mdi-account-box" class="nav-drawer-text-item"
-                        title="Appointment History"></v-list-item> -->
-
                     <v-list-item prepend-icon="mdi-home-circle" class="nav-drawer-text-item"
                         @click="goToHome">Home</v-list-item>
 
@@ -17,11 +14,11 @@
                         Appointment</v-list-item>
 
                 </v-list>
-                <v-dialog v-model="showNewAppointment" @close-appointment="cancelNewAppointment"
+                <v-dialog v-model="showNewAppointment" @close-appointment="closeDialog"
                     title="Create New Appointment">
                     <v-card class="custom-dialog-card">
                         <h2>New Appointment</h2>
-                        <newAppointment :professionalDetails="professionalData" :showDialog="showNewAppointment" />
+                        <newAppointment :professionalDetails="professionalData" :showDialog="showNewAppointment" @close-appointment="closeDialog"/>
                     </v-card>
                 </v-dialog>
 

@@ -1,13 +1,13 @@
 <template>
-    <div class="landing-page-container">
+    <div class="landing-page-container bg-gradient" >
         <div class="intro">
-            <h1>Patient Bookr</h1>
-            <p>Keep track of your appointments with ease, and never forget a patient again.</p>
+            <h1 class="display-4 text-white">Patient Bookr</h1>
+            <p class="subtitle-1 text-white">Keep track of your appointments with ease, and never forget a patient again.</p>
         </div>
 
         <div v-if="isLoggedIn" class="buttons-after-login">
-            <button><router-link :to="'/home'">Continue to home page</router-link></button>
-            <button @click="logOut">Log Out</button>
+            <v-btn class="btn-primary" @click="navigateToHome">Continue to home page</v-btn>
+            <v-btn class="btn-logout" @click="logOut">Log Out</v-btn>
 
         </div>
         <div v-else>
@@ -32,17 +32,19 @@ export default {
     mounted() {
         if (this.$cookies.isKey('professional_data')) {
             this.isLoggedIn = true
+            this.$router.push({name: 'Home'})
         }
     },
     methods: {
-        callback: async function (response) {
+        callback:  function (response) {
             this.isLoggedIn = true
             const userData = decodeCredential(response.credential);
             const jsonUserData = JSON.stringify(userData)
             this.$cookies.set('professional_data', jsonUserData)
             this.name = userData.name
             this.email = userData.email
-            await fetch(DATA_URL, {
+           
+            fetch(DATA_URL, {
                 method: 'POST',
                 headers: {
                     "Content-Type": "application/json"
@@ -52,14 +54,18 @@ export default {
                     email: this.email
                 })
             })
-            this.$nextTick(() => {
-                this.$router.push({ name: 'Home' })
-            })
+            console.log(response.status)
+
+            this.$router.push({ name: 'Home' })
+
         },
         logOut: function () {
             googleLogout()
             this.$cookies.remove('professional_data')
             this.isLoggedIn = false
+        },
+        navigateToHome(){
+            this.$router.push({ name: 'Home' })
         }
     },
 

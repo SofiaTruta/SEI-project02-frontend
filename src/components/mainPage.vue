@@ -8,10 +8,6 @@
                 <h1>Patient Bookr</h1>
             </div>
 
-            <div v-if="showNewAppointment" class="new-appointment-container">
-                <newAppointment :professionalDetails="professionalData" :showDialog="showNewAppointment" @cancel-appointment="cancelNewAppointment" />
-            </div>
-
             <div class="appointments-list">
                 <h3>Your Upcoming Appointments</h3>
                 <div v-if="professionalData">
@@ -21,20 +17,9 @@
                             <v-list-item v-for="appointment in professionalData.appointments" :key="appointment._id"
                                 :to="'/appointments/' + appointment._id">
                                 <template v-slot:default>
-                                    <h4>{{ $moment(appointment.date).format('L') }}</h4>
+                                    <h4>{{ $moment(appointment.date).format('DD/MM/YYYY') }}</h4>
                                     <h4>{{ appointment.time }}</h4>
                                     <p>Patient Name: {{ appointment?.patientDetails?.name }}</p>
-                                </template>
-
-                                <template v-slot:action>
-                                    <div v-if="!showNewAppointment">
-                                        <v-btn icon @click.stop="deleteAppointment(appointment._id)">
-                                            <v-icon>mdi-delete</v-icon>
-                                        </v-btn>
-                                        <v-btn icon @click.stop="setEditAppointmentId(appointment._id)">
-                                            <v-icon>mdi-pencil</v-icon>
-                                        </v-btn>
-                                    </div>
                                 </template>
                             </v-list-item>
                         </v-list>
@@ -47,14 +32,9 @@
 
 <script>
 import navBar from './navBar.vue'
-import newAppointment from './newAppointment.vue'
-// import editAppointment from './editAppointment.vue'
-
 
 const PROFESSIONALS_API = 'http://localhost:4000/professionals'
 const DELETE_APPT_API = 'http://localhost:4000/appointments'
-
-
 
 export default {
     name: 'mainPage',
@@ -66,14 +46,11 @@ export default {
                 name: '',
                 specialty: '',
                 appointments: []
-            },
-            showNewAppointment: false,
-            editingAppointmentId: null,
+            }
         }
     },
     components: {
-        navBar,
-        newAppointment
+        navBar
     },
     mounted() {
         this.fetchProfessionalData()
@@ -136,9 +113,6 @@ export default {
                 console.log('problems deleting appointment', error)
             }
         },
-        setEditAppointmentId(appointmentId) {
-            this.editingAppointmentId = appointmentId
-        },
         cancelNewAppointment() {
             this.showNewAppointment = false
         }
@@ -146,6 +120,4 @@ export default {
 }
 
 </script>
-<style scoped>
-@import "../assets/css/mainPage.css";
-</style>
+<style scoped>@import "../assets/css/mainPage.css";</style>
