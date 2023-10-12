@@ -49,8 +49,7 @@ export default {
                 name: '',
                 specialty: '',
                 appointments: []
-            },
-            emptyArray: []
+            }
         }
     },
     components: {
@@ -123,10 +122,6 @@ export default {
             this.showNewAppointment = false
         },
         updateComponent() {
-            //clear up my appointments array
-            this.professionalData.appointments = []
-            console.log('trying to clear the array', this.professionalData.appointments) //it is not clearing it!
-
             this.$nextTick(async () => {
 
                 let allProfessionals = null;//array
@@ -136,6 +131,7 @@ export default {
                 try {
                     const response = await fetch(PROFESSIONALS_API);
                     const result = await response.json();
+                    console.log(result)
                     allProfessionals = result.allProfessionals;
                     allAppointments = result.allAppointments
 
@@ -145,15 +141,6 @@ export default {
                     );
                     professionalId = professional._id;
                     this.professionalData._id = professionalId;
-
-                    //iterate through appointments array and find only the ones for this professional
-                  
-                    // allAppointments.forEach(appointment => {
-                    //     if (appointment.professionalDetails === professionalId && appointment.status === 'upcoming') {
-                    //         this.professionalData.appointments.push(appointment)
-                    //     }
-                    // });
-
 
                     const appointmentsForThisProfessional = []
                     allAppointments.forEach(appointment => {
@@ -168,22 +155,13 @@ export default {
                         if(!this.professionalData.appointments.some((oldAppointment) => oldAppointment._id === appointment._id))
                         {
                             differences.push(appointment)
+                            this.professionalData.appointments.push(appointment)
                         }
                     })
-                    console.log("differences:", differences)
-
-
                 } catch (error) {
                     console.error('Error fetching data:', error);
                 }
-
-
             })
-
-
-
-
-            // this.professionalData.appointments.push(data)
         }
     }
 }

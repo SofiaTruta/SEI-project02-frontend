@@ -1,7 +1,10 @@
 <template>
     <v-card>
         <v-layout>
-            <v-navigation-drawer class="bg-blue-lighten-2" theme="light" permanent>
+            <v-navigation-drawer 
+            class="bg-blue-lighten-2" 
+            theme="light" 
+            permanent>
                 <v-list color="transparent" class="nav-drawer-text">
 
                     <v-list-item prepend-icon="mdi-account" title="Hello">{{ professionalData.name
@@ -26,7 +29,7 @@
                     <v-card class="custom-dialog-card">
                         <h2>New Appointment</h2>
                         <newAppointment :professionalDetails="professionalData" :showDialog="showNewAppointment"
-                            @close-appointment="closeDialog" />
+                        @close-appointment="closeDialog" />
                     </v-card>
                 </v-dialog>
 
@@ -61,7 +64,7 @@ export default {
         },
         showNewAppointment: false,
     }),
-    emits: ['force-update'],
+    emits: ['update-component'],
     components: {
         logOutButton,
         newAppointment

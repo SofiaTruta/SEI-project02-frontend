@@ -94,9 +94,9 @@ export default {
                     .then(response => response.json())
                     .then(data => {
                         console.log('new appointment saved', data)
-
+                        this.$emit('close-appointment', this.newAppointmentData);
                     })
-                this.$emit('close-appointment', this.newAppointmentData);
+                
 
             } catch (error) {
                 console.log('problems in the frontend submitting new appointment', error)
