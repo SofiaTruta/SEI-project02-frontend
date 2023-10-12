@@ -1,14 +1,19 @@
+body::-webkit-scrollbar {
+  width: 0 !important;
+}
+
 html,
 body {
   font-family: 'Hind Madurai', sans-serif;
+  
 }
 
 .landing-page-container {
   display: flex;
   flex-direction: column;
-  /* justify-content: center; */
   align-items: center;
   height: 100vh;
+  width: 100vw;
 }
 
 .landing-page-container>div {
@@ -25,31 +30,10 @@ body {
   font-weight: 700;
 }
 
-.buttons-after-login {
-  display: flex;
-  flex-direction: row;
-  gap: 20px;
+.landing-page-container h5 {
+  margin: 4%;
 }
-
 
 .bg-gradient {
   background: linear-gradient(to bottom, #3494E6, #EC6EAD);
-}
-
-.btn-primary {
-  background-color: #2c92c1; 
-  color: #fff; 
-  border: none;
-  padding: 10px 20px;
-  border-radius: 5px;
-  font-weight: bold;
-}
-
-.btn-logout {
-  background-color: #8d0755; 
-  color: #fff; 
-  border: none;
-  padding: 10px 20px;
-  border-radius: 5px;
-  font-weight: bold;
 }

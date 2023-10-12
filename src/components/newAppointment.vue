@@ -3,8 +3,7 @@
         <v-container>
             <v-row>
                 <v-col cols="12" md="6">
-                    <v-text-field v-model="newAppointmentData.date" label="Date" type="date" required v-bind="attrs"
-                        v-on="on"></v-text-field>
+                    <v-text-field v-model="newAppointmentData.date" label="Date" type="date" required></v-text-field>
                 </v-col>
 
                 <v-col cols="12" md="6">
@@ -30,8 +29,8 @@
             </v-row>
             <v-row>
                 <v-col cols="12">
-                    <v-btn @click="createNewAppointment">Save</v-btn>
-                    <v-btn @click=cancelAppointment>Cancel</v-btn>
+                    <v-btn class="ma-2" @click="createNewAppointment">Save</v-btn>
+                    <v-btn class="ma-2" @click=cancelAppointment>Cancel</v-btn>
                 </v-col>
             </v-row>
         </v-container>
@@ -84,6 +83,7 @@ export default {
                 }
                 //if no error, proceed
                 this.dateOfBirthError = false;
+
                 fetch(NEW_APPOINTMENT_API, {
                     method: 'POST',
                     headers: {
@@ -96,7 +96,7 @@ export default {
                         console.log('new appointment saved', data)
 
                     })
-                this.$emit('close-appointment');
+                this.$emit('close-appointment', this.newAppointmentData);
 
             } catch (error) {
                 console.log('problems in the frontend submitting new appointment', error)

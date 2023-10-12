@@ -4,6 +4,7 @@ import landingPage from './src/components/landingPage'
 import mainPage from './src/components/mainPage'
 import singleAppointment from './src/components/singleAppointment'
 import completedAppointments from './src/components/completedAppointments'
+import allPatients from './src/components/allPatients'
 
 const routes = [
     {
@@ -25,6 +26,11 @@ const routes = [
         name: 'Completed Appointments',
         path:'/appointments/completed',
         component: completedAppointments
+    },
+    {
+        name: 'All Patients',
+        path: '/patients',
+        component: allPatients
     }
 ]
 

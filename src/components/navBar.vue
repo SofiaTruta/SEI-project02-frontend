@@ -4,11 +4,14 @@
             <v-navigation-drawer class="bg-blue-lighten-2" theme="light" permanent>
                 <v-list color="transparent" class="nav-drawer-text">
 
-                    <v-list-item prepend-icon="mdi-account" title="Professional:">{{ professionalData.name
+                    <v-list-item prepend-icon="mdi-account" title="Hello">{{ professionalData.name
                     }}</v-list-item>
 
                     <v-list-item prepend-icon="mdi-home-circle" class="nav-drawer-text-item"
                         @click="goToHome">Home</v-list-item>
+
+                    <v-list-item prepend-icon="mdi-account-supervisor" class="nav-drawer-text-item"
+                        @click="goToAllPatients">My Patients</v-list-item>
 
                     <v-list-item prepend-icon="mdi-history" class="nav-drawer-text-item"
                         @click="goToCompletedAppointments">Completed Appointments</v-list-item>
@@ -56,7 +59,7 @@ export default {
             name: '',
             specialty: '',
         },
-        showNewAppointment: false
+        showNewAppointment: false,
     }),
     emits: ['force-update'],
     components: {
@@ -95,9 +98,10 @@ export default {
             this.showNewAppointment = true
         },
 
-        closeDialog() {
+        closeDialog(data) {
+            // console.log(data)
             this.showNewAppointment = false
-            this.$emit('force-update')
+            this.$emit('update-component', data)
         },
         cancelNewAppointment() {
             console.log('received emit!')
@@ -106,8 +110,11 @@ export default {
         goToHome() {
             this.$router.push('/home');
         },
-        goToCompletedAppointments(){
+        goToCompletedAppointments() {
             this.$router.push('/appointments/completed');
+        },
+        goToAllPatients() {
+            this.$router.push('/patients')
         }
     }
 }

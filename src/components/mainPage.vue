@@ -1,77 +1,37 @@
 <template>
     <v-container>
-      <v-row>
-        <v-col cols="2">
-          <navBar class="nav-bar" @force-update="forceUpdateComponent" />
-        </v-col>
-        <v-col cols="10">
-          <div class="main-content">
-            <div class="header">
-              <h1>Patient Bookr</h1>
-            </div>
-            <div class="appointments-list">
-              <h3>Your Upcoming Appointments</h3>
-              <p>click on each appointment for more details</p>
-              <div v-if="professionalData">
-                <div v-if="professionalData.appointments">
-                  <v-list lines="two">
-                    <v-list-item
-                      v-for="appointment in professionalData.appointments"
-                      :key="appointment._id"
-                      :to="'/appointments/' + appointment._id"
-                      class="custom-list-item"
-                    >
-                      <h4>{{ $moment(appointment.date).format('DD/MM/YYYY') }}</h4>
-                      <h4>{{ appointment.time }}</h4>
-                      <p>Patient Name: {{ appointment?.patientDetails?.name }}</p>
-                      <p>Status: {{ appointment?.status }}</p>
-                    </v-list-item>
-                  </v-list>
-                </div>
-              </div>
-            </div>
-          </div>
-        </v-col>
-      </v-row>
-    </v-container>
-  </template>
-  
-
-<!-- <template>
-    <div class="main-page-container">
-        <navBar class="nav-bar" @force-update="forceUpdateComponent"/>
-
-        <div class="main-content">
-
-            <div class="header">
-                <h1>Patient Bookr</h1>
-            </div>
-
-            <div class="appointments-list">
-                <h3>Your Upcoming Appointments</h3>
-                <p>click on each appointment for more details</p>
-                <div v-if="professionalData">
-                    <div v-if="professionalData.appointments">
-
-                        <v-list lines="two">
-                            <v-list-item 
-                            v-for="appointment in professionalData.appointments"
-                             :key="appointment._id"
-                                :to="'/appointments/' + appointment._id"
-                                class="custom-list-item">
-                                    <h4>{{ $moment(appointment.date).format('DD/MM/YYYY') }}</h4>
-                                    <h4>{{ appointment.time }}</h4>
-                                    <p>Patient Name: {{ appointment?.patientDetails?.name }}</p>
-                                    <p>Status: {{ appointment?.status }}</p>
-                            </v-list-item>
-                        </v-list>
+        <v-row>
+            <v-col cols="2">
+                <navBar class="nav-bar" @update-component="updateComponent" />
+            </v-col>
+            <v-col cols="10">
+                <div class="main-content">
+                    <div class="header">
+                        <h1>Patient Bookr</h1>
+                    </div>
+                    <div class="appointments-list">
+                        <h3>Your Upcoming Appointments</h3>
+                        <p>(click on each appointment for more details)</p>
+                        <div v-if="professionalData">
+                            <div v-if="professionalData.appointments">
+                                <v-list lines="two">
+                                    <v-list-item v-for="appointment in professionalData.appointments" :key="appointment._id"
+                                        :to="'/appointments/' + appointment._id" class="custom-list-item">
+                                        <h4>{{ $moment(appointment.date).format('DD/MM/YYYY') }}</h4>
+                                        <h4>{{ appointment.time }}</h4>
+                                        <p>Patient Name: {{ appointment?.patientDetails?.name }}</p>
+                                        <p>Status: {{ appointment?.status }}</p>
+                                    </v-list-item>
+                                </v-list>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </div>
-    </div>
-</template> -->
-
+            </v-col>
+        </v-row>
+    </v-container>
+</template>
+  
 <script>
 import navBar from './navBar.vue'
 
@@ -89,7 +49,8 @@ export default {
                 name: '',
                 specialty: '',
                 appointments: []
-            }
+            },
+            emptyArray: []
         }
     },
     components: {
@@ -97,9 +58,6 @@ export default {
     },
     mounted() {
         this.fetchProfessionalData()
-    },
-    updated() {
-
     },
     methods: {
         async fetchProfessionalData() {
@@ -151,7 +109,12 @@ export default {
                 await fetch(`${DELETE_APPT_API}/${appointmentId}`, {
                     method: 'DELETE'
                 })
-                this.professionalData.appointments = this.professionalData.appointments.filter(appointment => appointment._id !== appointmentId)
+                // this.professionalData.appointments = this.professionalData.appointments.filter(appointment => appointment._id !== appointmentId)
+
+                const index = this.professionalData.appointments.findIndex(appointment => appointment._id === appointmentId);
+                if (index !== -1) {
+                    this.professionalData.appointments.splice(index, 1);
+                }
             } catch (error) {
                 console.log('problems deleting appointment', error)
             }
@@ -159,8 +122,68 @@ export default {
         cancelNewAppointment() {
             this.showNewAppointment = false
         },
-        forceUpdateComponent(){
-            this.$forceUpdate()
+        updateComponent() {
+            //clear up my appointments array
+            this.professionalData.appointments = []
+            console.log('trying to clear the array', this.professionalData.appointments) //it is not clearing it!
+
+            this.$nextTick(async () => {
+
+                let allProfessionals = null;//array
+                let allAppointments = null; //array
+                let professionalId = null;
+                //fetch request for list of appointments again to force the component to update
+                try {
+                    const response = await fetch(PROFESSIONALS_API);
+                    const result = await response.json();
+                    allProfessionals = result.allProfessionals;
+                    allAppointments = result.allAppointments
+
+                    //identifying the current professional in the professional's array
+                    const professional = allProfessionals.find(
+                        (professional) => professional.email === this.professionalData.email
+                    );
+                    professionalId = professional._id;
+                    this.professionalData._id = professionalId;
+
+                    //iterate through appointments array and find only the ones for this professional
+                  
+                    // allAppointments.forEach(appointment => {
+                    //     if (appointment.professionalDetails === professionalId && appointment.status === 'upcoming') {
+                    //         this.professionalData.appointments.push(appointment)
+                    //     }
+                    // });
+
+
+                    const appointmentsForThisProfessional = []
+                    allAppointments.forEach(appointment => {
+                        if (appointment.professionalDetails === professionalId && appointment.status === 'upcoming') {
+                            appointmentsForThisProfessional.push(appointment)
+                        }
+                    });
+
+                    // see if this array is any different from our data array
+                    const differences = []
+                    appointmentsForThisProfessional.forEach((appointment) => {
+                        if(!this.professionalData.appointments.some((oldAppointment) => oldAppointment._id === appointment._id))
+                        {
+                            differences.push(appointment)
+                        }
+                    })
+                    console.log("differences:", differences)
+
+
+                } catch (error) {
+                    console.error('Error fetching data:', error);
+                }
+
+
+            })
+
+
+
+
+            // this.professionalData.appointments.push(data)
         }
     }
 }

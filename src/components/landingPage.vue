@@ -11,7 +11,7 @@
 
         </div>
         <div v-else>
-            <h5>Sign In/Register as a Professional</h5>
+            <h5 class="subtitle-1 text-white">Sign In/Register as a Professional</h5>
             <GoogleLogin :callback="callback" />
         </div>
     </div>

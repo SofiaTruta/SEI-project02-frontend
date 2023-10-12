@@ -1,35 +1,42 @@
 <template>
-    <div class="single-appointment-container">
-        <navBar class="nav-bar" />
-        <div class="main-content">
-            <v-sheet :min-height="700" :min-width="700" rounded class="pa-4">
-                <h1 class="mt-4 headline">Your Appointment for {{ appointmentData?.patientDetails?.name }}</h1>
-                <h2 class="mb-4 subtitle-1">{{ $moment(appointmentData?.date).format('LL') }}</h2>
-                <h2 class="mb-4 subtitle-1"> {{ appointmentData?.time }}</h2>
-                <h3 class="mb-4 subtitle-2">Status: {{ appointmentData?.status }}</h3>
-                <h4 class="mb-4 subtitle-2">Patient's date of birth: {{ $moment(appointmentData?.patientDetails?.dateOfBirth).format('DD/MM/YYYY') }}</h4>
-                <h3 class="mb-2 headline">Treatment Notes:</h3>
-                <p class="mb-4 body-1">{{ appointmentData?.patientDetails?.currentTreatment }}</p>
+    <v-container>
+        <v-row>
+            <v-col cols="2">
+                <navBar class="nav-bar" />
+            </v-col>
+            <v-col cols="10">
+                <div class="single-appointment-container">
+                        <v-sheet rounded class="pa-4">
+                            <h1 class="mt-4 headline">Your Appointment for {{ appointmentData?.patientDetails?.name }}</h1>
+                            <h2 class="mb-4 subtitle-1">{{ $moment(appointmentData?.date).format('LL') }}</h2>
+                            <h2 class="mb-4 subtitle-1"> {{ appointmentData?.time }}</h2>
+                            <h3 class="mb-4 subtitle-2">Status: {{ appointmentData?.status }}</h3>
+                            <h4 class="mb-4 subtitle-2">Patient's date of birth: {{
+                                $moment(appointmentData?.patientDetails?.dateOfBirth).format('DD/MM/YYYY') }}</h4>
+                            <h3 class="mb-2 headline">Treatment Notes:</h3>
+                            <p class="mb-4 body-1">{{ appointmentData?.patientDetails?.currentTreatment }}</p>
 
-                <v-btn class="ma-2" @click.stop="deleteAppointment(appointmentData._id)">
-                    <v-icon class="square-icon" icon="mdi-trash-can"></v-icon>
-                </v-btn>
+                            <v-btn class="ma-2" @click.stop="deleteAppointment(appointmentData._id)">
+                                <v-icon class="square-icon" icon="mdi-trash-can"></v-icon>
+                            </v-btn>
 
-                <v-btn  @click.stop="showEditing">
-                    <v-icon class="square-icon" icon="mdi-pencil"></v-icon>
-                </v-btn>
-                
-                <v-btn @click="updateAppointmentStatus(appointmentData._id, 'completed', $event)" prepend-icon="mdi-check" max-height="100"> mark as completed</v-btn>
+                            <v-btn class="ma-2" @click.stop="showEditing">
+                                <v-icon class="square-icon" icon="mdi-pencil"></v-icon>
+                            </v-btn>
 
-                <div v-if="showEditAppointment">
-                    <editAppointment :appointmentData="appointmentData" @editSaved="updateAppointmentData"
-                        @closeEditAppointment="cancelEditing" />
-                    <v-btn @click="cancelEditing">cancel</v-btn>
-                </div>
+                            <v-btn class="ma-2" @click="updateAppointmentStatus(appointmentData._id, 'completed', $event)"
+                                prepend-icon="mdi-check" max-height="100"> mark as completed</v-btn>
 
-            </v-sheet>
-        </div>
-    </div>
+                            <div v-if="showEditAppointment">
+                                <editAppointment :appointmentData="appointmentData" @editSaved="updateAppointmentData"
+                                    @closeEditAppointment="cancelEditing" />
+                                <v-btn @click="cancelEditing">cancel</v-btn>
+                            </div>
+                        </v-sheet>
+                    </div>
+            </v-col>
+        </v-row>
+    </v-container>
 </template>
 
 <script>
@@ -56,7 +63,6 @@ export default {
     },
     mounted() {
         const route = useRoute()
-        console.log(route.params.appointmentId)
         fetch(`${DATA_API}/${route.params.appointmentId}`)
             .then(response => response.json())
             .then(result => {
@@ -94,13 +100,7 @@ export default {
                     body: JSON.stringify({ status: newStatus }),
                 });
                 response.status(200)
-                // if (response.ok) {
-                //     // Update the status of the appointment 
-                //     const appointment = this.professionalData.appointments.find(appointment => appointment._id === appointmentId);
-                //     if (appointment) {
-                //         appointment.status = newStatus;
-                //     }
-                // }
+            
                 this.$router.push('/home')
             } catch (error) {
                 console.error('Error updating appointment status:', error);
@@ -109,7 +109,6 @@ export default {
     }
 }
 </script>
-
 <style>
-@import '../assets/css/singleAppointment.css';
+@import "../assets/css/singleAppointment.css";
 </style>

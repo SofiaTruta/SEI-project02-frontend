@@ -1,7 +1,16 @@
-.single-appointment-container {
-    display: grid;
-    grid-template-columns: 1fr 4fr;
-    padding: 20px;
+body {
+    background: #c6e7ff64;
+    margin: 0;
+    padding: 0;
 }
 
+.single-appointment-container {
+    background-color: #f5f5f5;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
 
+.single-appointment-container h1 {
+    font-family: 'Montserrat', sans-serif;
+}

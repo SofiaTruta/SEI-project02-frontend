@@ -4,6 +4,8 @@ import router from '../router'
 import vue3GoogleLogin from 'vue3-google-login'
 import vue3Cookies from 'vue3-cookies'
 
+import {createPinia} from 'pinia'
+
 import 'vuetify/styles'
 import { createVuetify } from 'vuetify'
 import * as components from 'vuetify/components'
@@ -20,6 +22,8 @@ import moment from 'moment'
 
 
 const app = createApp(App)
+
+app.use(createPinia())
 
 app.config.globalProperties.$moment = moment
 
