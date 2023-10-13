@@ -5,6 +5,8 @@ import mainPage from './src/components/mainPage'
 import singleAppointment from './src/components/singleAppointment'
 import completedAppointments from './src/components/completedAppointments'
 import allPatients from './src/components/allPatients'
+import singlePatient from './src/components/singlePatient'
+import missedAppointments from './src/components/missedAppointments'
 
 const routes = [
     {
@@ -31,6 +33,16 @@ const routes = [
         name: 'All Patients',
         path: '/patients',
         component: allPatients
+    },
+    {
+        name: 'Single Patient',
+        path: '/my-patients/:patientId',
+        component: singlePatient
+    },
+    {
+        name: 'Missed Appointments',
+        path: '/appointments/missed',
+        component: missedAppointments
     }
 ]
 

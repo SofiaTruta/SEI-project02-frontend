@@ -1,22 +1,19 @@
 <template>
-    <v-container>
+       <navBar class="nav-bar" />
+  
+       <v-main class="rounded-lg ma-4">
         <v-row>
-            <v-col cols="2">
-                <navBar class="nav-bar" />
-            </v-col>
-            <v-col cols="10">
+            <v-col cols="12">
                 <div class="main-content">
-                    <div class="header">
-                        <h1>Patient Bookr</h1>
-                    </div>
+                    <h1 class="header">Patient Bookr</h1>
 
-                    <div class="appointments-list">
-                        <h3>My Patients</h3>
-                        <p>(click on each patient for more details)</p>
+                    <div class="main-info-display">
+                        <h3 class="text-center">My Patients</h3>
+                        <p class="text-center">(click on each patient for more details)</p>
 
                         <div v-if="patientList.length > 0">
-                            <v-list lines="two">
-                                <v-list-item v-for="patient in patientList" :key="patient._id" class="custom-list-item">
+                            <v-list lines="two" class="rounded-lg">
+                                <v-list-item v-for="patient in patientList" :key="patient._id" class="custom-list-item" :to="'/my-patients/'+ patient._id">
                                     <h3>{{ patient.name }}</h3>
                                     <p>Date of birth: {{ $moment(patient.dateOfBirth).format('DD-MM-YYYY') }}</p>
                                 </v-list-item>
@@ -26,7 +23,7 @@
                 </div>
             </v-col>
         </v-row>
-    </v-container>
+    </v-main>
 </template>
 
 <script>
@@ -83,7 +80,6 @@ export default {
                         this.patientList.push(appointment.patientDetails)
                     }
                 })
-                console.log(this.patientList)
             } catch (error) {
                 console.error('Error fetching data:', error);
             }
@@ -92,7 +88,3 @@ export default {
 }
 
 </script>
-<style scoped>
-@import "../assets/css/allPatients.css";
-
-</style>

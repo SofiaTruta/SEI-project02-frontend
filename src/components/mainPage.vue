@@ -1,20 +1,18 @@
 <template>
-    <v-container>
+    <navBar class="nav-bar" @update-component="updateComponent" />
+
+    <v-main class="rounded-lg ma-4" v-if="$vuetify.display.lgAndUp">
         <v-row>
-            <v-col cols="2">
-                <navBar class="nav-bar" @update-component="updateComponent" />
-            </v-col>
-            <v-col cols="10">
+            <v-col cols="12">
                 <div class="main-content">
-                    <div class="header">
-                        <h1>Patient Bookr</h1>
-                    </div>
-                    <div class="appointments-list">
-                        <h3>Your Upcoming Appointments</h3>
-                        <p>(click on each appointment for more details)</p>
-                        <div v-if="professionalData">
+                    <h1 class="header">Patient Bookr</h1>
+
+                    <div class="main-info-display">
+                        <h3 class="text-center">Your Upcoming Appointments</h3>
+                        <p class="text-center">(click on each appointment for more details)</p>
+
                             <div v-if="professionalData.appointments">
-                                <v-list lines="two">
+                                <v-list lines="two" class="rounded-lg">
                                     <v-list-item v-for="appointment in professionalData.appointments" :key="appointment._id"
                                         :to="'/appointments/' + appointment._id" class="custom-list-item">
                                         <h4>{{ $moment(appointment.date).format('DD/MM/YYYY') }}</h4>
@@ -24,12 +22,39 @@
                                     </v-list-item>
                                 </v-list>
                             </div>
-                        </div>
                     </div>
                 </div>
             </v-col>
         </v-row>
-    </v-container>
+    </v-main>
+
+    <!-- main for mobile -->
+    <v-main class="rounded-lg ma-4" v-if="$vuetify.display.mobile">
+        <v-row>
+            <v-col cols="12">
+                <div class="main-content">
+                    <h1 class="header">Patient Bookr</h1>
+
+                    <div class="main-info-display">
+                        <h3 class="text-center">Upcoming Appointments</h3>
+
+                            <div v-if="professionalData.appointments">
+                                <v-list lines="two" class="rounded-lg">
+                                    <v-list-item v-for="appointment in professionalData.appointments" :key="appointment._id"
+                                        :to="'/appointments/' + appointment._id" class="custom-list-item">
+                                        <h4>{{ $moment(appointment.date).format('DD/MM/YYYY') }}</h4>
+                                        <h4>{{ appointment.time }}</h4>
+                                        <p>Patient Name: {{ appointment?.patientDetails?.name }}</p>
+                                        <p>Status: {{ appointment?.status }}</p>
+                                    </v-list-item>
+                                </v-list>
+                            </div>
+                    </div>
+                </div>
+            </v-col>
+        </v-row>
+    </v-main>
+
 </template>
   
 <script>
@@ -37,6 +62,7 @@ import navBar from './navBar.vue'
 
 const PROFESSIONALS_API = 'http://localhost:4000/professionals'
 const DELETE_APPT_API = 'http://localhost:4000/appointments'
+const UPDATE_APPT_STATUS_API = 'http://localhost:4000/update-appointment-status'
 
 
 export default {
@@ -56,7 +82,11 @@ export default {
         navBar
     },
     mounted() {
-        this.fetchProfessionalData()
+        this.fetchProfessionalData().then(() => {
+            if (this.professionalData.appointments.length > 0) {
+                this.updateAppointmentStatus()
+            }
+        })
     },
     methods: {
         async fetchProfessionalData() {
@@ -152,14 +182,36 @@ export default {
                     // see if this array is any different from our data array
                     const differences = []
                     appointmentsForThisProfessional.forEach((appointment) => {
-                        if(!this.professionalData.appointments.some((oldAppointment) => oldAppointment._id === appointment._id))
-                        {
+                        if (!this.professionalData.appointments.some((oldAppointment) => oldAppointment._id === appointment._id)) {
                             differences.push(appointment)
                             this.professionalData.appointments.push(appointment)
                         }
                     })
+                    this.updateAppointmentStatus()
                 } catch (error) {
                     console.error('Error fetching data:', error);
+                }
+            })
+        },
+        updateAppointmentStatus() {
+            const now = new Date()
+
+            this.professionalData.appointments.forEach((appointment) => {
+                const appointmentId = appointment._id
+                const appointmentDate = new Date(appointment.date)
+                if (appointmentDate < now && appointment.status === 'upcoming') {
+                    appointment.status = 'missed'
+                    try {
+                        fetch(`${UPDATE_APPT_STATUS_API}/${appointmentId}`, {
+                            method: 'PUT',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({ status: 'missed' }),
+                        })
+                    } catch (error) {
+                        console.log('problems updating status to missed', error)
+                    }
                 }
             })
         }
@@ -167,6 +219,6 @@ export default {
 }
 
 </script>
-<style scoped>
-@import "../assets/css/mainPage.css";
+<style>
+@import "../assets/css/globalStyling.css";
 </style>

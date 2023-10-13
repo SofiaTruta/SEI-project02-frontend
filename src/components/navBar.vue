@@ -1,55 +1,95 @@
 <template>
-    <v-card>
-        <v-layout>
-            <v-navigation-drawer 
-            class="bg-blue-lighten-2" 
-            theme="light" 
-            permanent>
-                <v-list color="transparent" class="nav-drawer-text">
+    <v-navigation-drawer v-if="$vuetify.display.lgAndUp" image='https://i.imgur.com/NF91dzH.png' theme="light" permanent>
+        <v-list color="transparent" class="nav-drawer-text">
 
-                    <v-list-item prepend-icon="mdi-account" title="Hello">{{ professionalData.name
-                    }}</v-list-item>
+            <v-list-item class="font-weight-bold" prepend-icon="mdi-account" title="Hello" @click="goToHome">
+                <p>{{ professionalData.name
+                }}</p>
+            </v-list-item>
 
-                    <v-list-item prepend-icon="mdi-home-circle" class="nav-drawer-text-item"
-                        @click="goToHome">Home</v-list-item>
+            <v-list-item prepend-icon="mdi-account-supervisor" class="nav-drawer-text-item" @click="goToAllPatients">My
+                Patients</v-list-item>
 
-                    <v-list-item prepend-icon="mdi-account-supervisor" class="nav-drawer-text-item"
-                        @click="goToAllPatients">My Patients</v-list-item>
+            <v-list-item prepend-icon="mdi-home-circle" class="nav-drawer-text-item" @click="goToHome">Upcoming
+                Appointments</v-list-item>
 
-                    <v-list-item prepend-icon="mdi-history" class="nav-drawer-text-item"
-                        @click="goToCompletedAppointments">Completed Appointments</v-list-item>
+            <v-list-item prepend-icon="mdi-history" class="nav-drawer-text-item"
+                @click="goToCompletedAppointments">Completed Appointments</v-list-item>
 
-                    <v-list-item @click="openDialog" prepend-icon="mdi-plus-circle" class="nav-drawer-text-item">New
-                        Appointment</v-list-item>
+            <v-list-item prepend-icon="mdi-close-circle-outline" class="nav-drawer-text-item"
+                @click="goToMissedAppointments">Missed Appointments</v-list-item>
 
-                </v-list>
+            <v-list-item @click="openDialog" prepend-icon="mdi-plus-circle" class="nav-drawer-text-item">New
+                Appointment</v-list-item>
+        </v-list>
 
-                <!-- dialog opens if showNewAppoint is true -->
-                <v-dialog v-model="showNewAppointment" @close-appointment="closeDialog">
-                    <v-card class="custom-dialog-card">
-                        <h2>New Appointment</h2>
-                        <newAppointment :professionalDetails="professionalData" :showDialog="showNewAppointment"
-                        @close-appointment="closeDialog" />
-                    </v-card>
-                </v-dialog>
+        <!-- dialog opens if showNewAppoint is true -->
+        <v-dialog v-model="showNewAppointment" @close-appointment="closeDialog">
+            <v-card class="custom-dialog-card">
+                <h2>New Appointment</h2>
+                <newAppointment :professionalDetails="professionalData" :showDialog="showNewAppointment"
+                    @close-appointment="closeDialog" />
+            </v-card>
+        </v-dialog>
 
+        <!-- logout button -->
+        <template v-slot:append>
+            <div class="pa-2">
+                <v-btn block @click="handleLogOut">Log out</v-btn>
+            </div>
+        </template>
+    </v-navigation-drawer>
 
+    <!-- navbar for smaller devices -->
+    <v-navigation-drawer v-if="$vuetify.display.mobile" 
+    image='https://i.imgur.com/NF91dzH.png' theme="light" permanent
+    expand-on-hover 
+    rail>
+        <v-list color="transparent" class="nav-drawer-text" density="compact" nav>
 
-                <template v-slot:append>
-                    <div class="pa-2">
-                        <v-btn block>
-                            <logOutButton />
-                        </v-btn>
-                    </div>
-                </template>
-            </v-navigation-drawer>
-        </v-layout>
-    </v-card>
+            <v-list-item class="font-weight-bold" prepend-icon="mdi-account" title="Hello" @click="goToHome">
+                <p>{{ professionalData.name
+                }}</p>
+            </v-list-item>
+
+            <v-list-item prepend-icon="mdi-account-supervisor" class="nav-drawer-text-item" @click="goToAllPatients">My
+                Patients</v-list-item>
+
+            <v-list-item prepend-icon="mdi-home-circle" class="nav-drawer-text-item" @click="goToHome">Upcoming
+                Appointments</v-list-item>
+
+            <v-list-item prepend-icon="mdi-history" class="nav-drawer-text-item"
+                @click="goToCompletedAppointments">Completed Appointments</v-list-item>
+
+            <v-list-item prepend-icon="mdi-close-circle-outline" class="nav-drawer-text-item"
+                @click="goToMissedAppointments">Missed Appointments</v-list-item>
+
+            <v-list-item @click="openDialog" prepend-icon="mdi-plus-circle" class="nav-drawer-text-item">New
+                Appointment</v-list-item>
+        </v-list>
+
+        <!-- dialog opens if showNewAppoint is true -->
+        <v-dialog v-model="showNewAppointment" @close-appointment="closeDialog">
+            <v-card class="custom-dialog-card">
+                <h2>New Appointment</h2>
+                <newAppointment :professionalDetails="professionalData" :showDialog="showNewAppointment"
+                    @close-appointment="closeDialog" />
+            </v-card>
+        </v-dialog>
+
+        <!-- logout button -->
+        <template v-slot:append>
+            <div class="pa-2">
+                <v-btn  @click="handleLogOut" icon="mdi-logout"></v-btn>
+            </div>
+        </template>
+    </v-navigation-drawer>
 </template>
 
 <script>
-import logOutButton from './logOutButton.vue'
+// import logOutButton from './logOutButton.vue'
 import newAppointment from './newAppointment.vue'
+import { googleLogout } from 'vue3-google-login';
 
 const PROFESSIONALS_API = 'http://localhost:4000/professionals'
 
@@ -66,7 +106,7 @@ export default {
     }),
     emits: ['update-component'],
     components: {
-        logOutButton,
+        // logOutButton,
         newAppointment
     },
     mounted() {
@@ -97,6 +137,11 @@ export default {
             }
 
         },
+        handleLogOut() {
+            googleLogout()
+            this.$cookies.remove('professional_data')
+            this.$router.push('/')
+        },
         openDialog() {
             this.showNewAppointment = true
         },
@@ -118,6 +163,9 @@ export default {
         },
         goToAllPatients() {
             this.$router.push('/patients')
+        },
+        goToMissedAppointments() {
+            this.$router.push('/appointments/missed')
         }
     }
 }

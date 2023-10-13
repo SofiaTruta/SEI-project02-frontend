@@ -1,9 +1,7 @@
 <template>
-    <v-container>
+       <navBar class="nav-bar" />
+       <v-main class="rounded-lg ma-4">
         <v-row>
-            <v-col cols="2">
-                <navBar class="nav-bar" />
-            </v-col>
             <v-col cols="10">
                 <div class="single-appointment-container">
                     <v-sheet rounded class="pa-4">
@@ -36,7 +34,7 @@
                 </div>
             </v-col>
         </v-row>
-    </v-container>
+    </v-main>
 </template>
 
 <script>
@@ -78,6 +76,27 @@ export default {
         },
         updateAppointmentData(updatedData) {
             this.appointmentData = updatedData;
+            const now = new Date()
+            const newAppointmentDate = new Date(this.appointmentData.date)
+
+            //if appointment.Data.date > now, change the status to 'upcoming'
+            if (newAppointmentDate > now) {
+                this.appointmentData.status = 'upcoming'
+
+                //I have to find out the id of the appointment
+                const appointmentId = this.appointmentData.patientDetails.appointments[0]
+                try {
+                    fetch(`${UPDATE_APPT_API}/${appointmentId}`, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ status: 'upcoming' }),
+                    })
+                } catch (error) {
+                    console.log('problems updating status to upcoming', error)
+                }
+            }
         },
         async deleteAppointment(appointmentId) {
             try {
@@ -110,5 +129,5 @@ export default {
 }
 </script>
 <style>
-@import "../assets/css/singleAppointment.css";
+
 </style>

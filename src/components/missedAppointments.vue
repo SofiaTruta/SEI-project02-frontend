@@ -8,24 +8,18 @@
                         <h1 class="header">Patient Bookr</h1>
 
                         <div class="main-info-display">
-                            <h3 class="text-center">Your Completed Appointments</h3>
+                            <h3 class="text-center">Your Missed Appointments</h3>
                             <p class="text-center">(click on each appointment for more details)</p>
 
-                            <div v-if="pastAppointments">
+                            <div v-if="missedAppointments">
                                 <v-list lines="two" class="rounded-lg">
-                                    <v-list-item v-for="appointment in pastAppointments" :key="appointment._id"
+                                    <v-list-item v-for="appointment in missedAppointments" :key="appointment._id"
                                         :to="'/appointments/' + appointment._id">
                                         <v-row align="center">
                                             <v-col cols="8">
                                                 <h4>{{ $moment(appointment.date).format('DD/MM/YYYY') }}</h4>
                                                 <h4>{{ appointment.time }}</h4>
                                                 <p>Patient Name: {{ appointment?.patientDetails?.name }}</p>
-                                            </v-col>
-
-                                            <v-col cols="4" class="text-right">
-                                                <v-btn class="ma-2" @click="deleteAppointment(appointment._id, $event)">
-                                                    <v-icon class="square-icon" icon="mdi-trash-can"></v-icon>
-                                                </v-btn>
                                             </v-col>
                                         </v-row>
                                     </v-list-item>
@@ -37,29 +31,28 @@
         </v-row>
     </v-main>
 </template>
-
 <script>
-import navBar from './navBar.vue'
 
-const DELETE_APPT_API = 'http://localhost:4000/appointments'
+import navBar from './navBar.vue';
+
 const PROFESSIONALS_API = 'http://localhost:4000/professionals'
 
 export default {
-    name: 'completedAppointments',
-    components: {
-        navBar
-    },
+    name: 'missedAppointments',
     data() {
         return {
-            pastAppointments: []
+            missedAppointments: []
             //keys for each appointment = date, patientDetails, professionalDetails, status, time, _id
         }
     },
+    components: {
+        navBar
+    },
     mounted() {
-        this.fetchCompletedAppointments()
+        this.fetchMissedAppointments()
     },
     methods: {
-        async fetchCompletedAppointments() {
+        async fetchMissedAppointments() {
             //get data from cookie
             const professionalCookies = this.$cookies.get('professional_data');
 
@@ -96,32 +89,14 @@ export default {
 
                 //filter based on status and push into pastAppointments array
                 appointmentsForThisProfessional.forEach(appointment => {
-                    if (appointment.status === 'completed') {
-                        this.pastAppointments.push(appointment)
+                    if (appointment.status === 'missed') {
+                        this.missedAppointments.push(appointment)
                     }
                 })
             } catch (error) {
-                console.log('problems in frontend completed appts', error)
-            }
-        },
-        async deleteAppointment(appointmentId, event) {
-            event.preventDefault()
-            try {
-                await fetch(`${DELETE_APPT_API}/${appointmentId}`, {
-                    method: 'DELETE'
-                })
-
-                this.pastAppointments.map((appointment) => {
-                    if (appointment._id === appointmentId) {
-                        this.pastAppointments.splice(appointment, 1)
-                    }
-                })
-
-            } catch (error) {
-                console.log('problems deleting appointment', error)
+                console.log('problems in frontend missed appts', error)
             }
         }
     }
 }
 </script>
-

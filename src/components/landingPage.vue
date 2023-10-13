@@ -54,10 +54,7 @@ export default {
                     email: this.email
                 })
             })
-            console.log(response.status)
-
             this.$router.push({ name: 'Home' })
-
         },
         logOut: function () {
             googleLogout()
