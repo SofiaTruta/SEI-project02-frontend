@@ -1,8 +1,9 @@
 <template>
+    <v-main v-if="$vuetify.display.lgAndUp">
     <div class="landing-page-container bg-gradient" >
         <div class="intro">
-            <h1 class="display-4 text-white">Patient Bookr</h1>
-            <p class="subtitle-1 text-white">Keep track of your appointments with ease, and never forget a patient again.</p>
+            <h1 class="text-white fade-in">Patient Bookr</h1>
+            <p class="text-white fade-in">Keep track of your appointments with ease, and never forget a patient again.</p>
         </div>
 
         <div v-if="isLoggedIn" class="buttons-after-login">
@@ -11,10 +12,31 @@
 
         </div>
         <div v-else>
-            <h5 class="subtitle-1 text-white">Sign In/Register as a Professional</h5>
-            <GoogleLogin :callback="callback" />
+            <h5 class="subtitle-1 text-white fade-in-longer">Sign In/Register as a Professional</h5>
+            <GoogleLogin :callback="callback" class="fade-in-longer"/>
         </div>
     </div>
+</v-main>
+
+<!-- view for mobile -->
+<v-main v-if="$vuetify.display.mobile">
+    <div class="landing-page-container bg-gradient" >
+        <div class="intro">
+            <h1 class="text-white mobile-h1 fade-in">Patient Bookr</h1>
+            <p class="text-white mobile-p fade-in">Keep track of your appointments with ease, and never forget a patient again.</p>
+        </div>
+
+        <div v-if="isLoggedIn" class="buttons-after-login">
+            <v-btn class="btn-primary" @click="navigateToHome">Continue to home page</v-btn>
+            <v-btn class="btn-logout" @click="logOut">Log Out</v-btn>
+
+        </div>
+        <div v-else>
+            <h5 class="subtitle-1 text-white fade-in-longer">Sign In/Register as a Professional</h5>
+            <GoogleLogin :callback="callback" class="fade-in-longer"/>
+        </div>
+    </div>
+</v-main>
 </template>
 
 <script>

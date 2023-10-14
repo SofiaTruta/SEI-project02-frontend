@@ -5,7 +5,7 @@ body::-webkit-scrollbar {
 html,
 body {
   font-family: 'Hind Madurai', sans-serif;
-  
+
 }
 
 .landing-page-container {
@@ -28,6 +28,11 @@ body {
 .landing-page-container h1 {
   font-family: 'Montserrat', sans-serif !important;
   font-weight: 700;
+  font-size: 4em;
+}
+
+.landing-page-container p {
+  font-size: 2em;
 }
 
 .landing-page-container h5 {
@@ -36,4 +41,33 @@ body {
 
 .bg-gradient {
   background: linear-gradient(to bottom, #3494E6, #EC6EAD);
+}
+
+/* mobile styling */
+
+.landing-page-container .mobile-h1 {
+  font-size: 2.5em;
+}
+
+.landing-page-container .mobile-p {
+  font-size: 1.5em;
+  padding: 2%
+}
+
+/* animation */
+@keyframes fade-in {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.fade-in {
+  animation: fade-in 1s ease-in-out
+}
+
+.fade-in-longer {
+  animation: fade-in 2s ease-in-out
 }

@@ -1,28 +1,69 @@
 <template>
        <navBar class="nav-bar" />
-       <v-main class="rounded-lg ma-4">
+       <v-main class="rounded-lg ma-4" v-if="$vuetify.display.lgAndUp">
         <v-row>
-            <v-col cols="10">
-                <div class="single-appointment-container">
+            <v-col cols="12">
+                <div class="main-content">
+                    <h1 class="header">Patient Bookr</h1>
+                    <h3 class="text-center">Appointment Details</h3>
+                    
                     <v-sheet rounded class="pa-4">
-                        <h1 class="mt-4 headline">Your Appointment for {{ appointmentData?.patientDetails?.name }}</h1>
-                        <h2 class="mb-4 subtitle-1">{{ $moment(appointmentData?.date).format('LL') }}</h2>
-                        <h2 class="mb-4 subtitle-1"> {{ appointmentData?.time }}</h2>
-                        <h3 class="mb-4 subtitle-2">Status: {{ appointmentData?.status }}</h3>
-                        <h4 class="mb-4 subtitle-2">Patient's date of birth: {{
-                            $moment(appointmentData?.patientDetails?.dateOfBirth).format('DD/MM/YYYY') }}</h4>
-                        <h3 class="mb-2 headline">Treatment Notes:</h3>
-                        <p class="mb-4 body-1">{{ appointmentData?.patientDetails?.currentTreatment }}</p>
+                        <h2 class="mt-1 subtitle-1">{{ appointmentData?.patientDetails?.name }}</h2>
+                        <h3 class="mt-1 subtitle-2">{{ $moment(appointmentData?.date).format('LL') }} at {{ appointmentData?.time }}</h3>
+                        <h4 class="mt-3 subtitle-2">Status: {{ appointmentData?.status }}</h4>
+                        <h4 class="mt-1 subtitle-2">Date of birth: {{
+                            $moment(appointmentData?.patientDetails?.dateOfBirth).format('DD-MM-YYYY') }}</h4>
+                        <h3 class="mt-3 headline">Treatment Notes:</h3>
+                        <p class="mt-1 body-1">{{ appointmentData?.patientDetails?.currentTreatment }}</p>
 
-                        <v-btn class="ma-2" @click.stop="deleteAppointment(appointmentData._id)">
+                        <v-btn class="mt-6 mr-4" @click.stop="deleteAppointment(appointmentData._id)">
                             <v-icon class="square-icon" icon="mdi-trash-can"></v-icon>
                         </v-btn>
 
-                        <v-btn class="ma-2" @click.stop="showEditing">
+                        <v-btn class="mt-6 mr-4" @click.stop="showEditing">
                             <v-icon class="square-icon" icon="mdi-pencil"></v-icon>
                         </v-btn>
 
-                        <v-btn class="ma-2" @click="updateAppointmentStatus(appointmentData._id, 'completed', $event)"
+                        <v-btn class="mt-6 mr-4" @click="updateAppointmentStatus(appointmentData._id, 'completed', $event)"
+                            prepend-icon="mdi-check" max-height="100"> mark as completed</v-btn>
+
+                        <div v-if="showEditAppointment">
+                            <editAppointment :appointmentData="appointmentData" @editSaved="updateAppointmentData"
+                                @closeEditAppointment="cancelEditing" />
+                            <v-btn @click="cancelEditing">cancel</v-btn>
+                        </div>
+                    </v-sheet>
+                </div>
+            </v-col>
+        </v-row>
+    </v-main>
+
+    <!-- view for mobile -->
+    <v-main class="rounded-lg ma-4" v-if="$vuetify.display.mobile">
+        <v-row>
+            <v-col cols="12">
+                <div class="main-content">
+                    <h1 class="mobile-header">Patient Bookr</h1>
+                    <h3 class="text-center mobile-h3">Appointment Details</h3>
+                    
+                    <v-sheet rounded class="pa-4">
+                        <h2 class="mt-1 subtitle-1">{{ appointmentData?.patientDetails?.name }}</h2>
+                        <h3 class="mt-1 subtitle-2">{{ $moment(appointmentData?.date).format('LL') }} at {{ appointmentData?.time }}</h3>
+                        <h4 class="mt-3 subtitle-2">Status: {{ appointmentData?.status }}</h4>
+                        <h4 class="mt-1 subtitle-2">DOB: {{
+                            $moment(appointmentData?.patientDetails?.dateOfBirth).format('DD-MM-YYYY') }}</h4>
+                        <h3 class="mt-3 headline">Treatment Notes:</h3>
+                        <p class="mt-1 body-1">{{ appointmentData?.patientDetails?.currentTreatment }}</p>
+
+                        <v-btn class="mt-6 mr-4" @click.stop="deleteAppointment(appointmentData._id)">
+                            <v-icon class="square-icon" icon="mdi-trash-can"></v-icon>
+                        </v-btn>
+
+                        <v-btn class="mt-6 mr-4" @click.stop="showEditing">
+                            <v-icon class="square-icon" icon="mdi-pencil"></v-icon>
+                        </v-btn>
+
+                        <v-btn class="mt-6 mr-4" @click="updateAppointmentStatus(appointmentData._id, 'completed', $event)"
                             prepend-icon="mdi-check" max-height="100"> mark as completed</v-btn>
 
                         <div v-if="showEditAppointment">
@@ -128,6 +169,9 @@ export default {
     }
 }
 </script>
-<style>
 
+<style scoped>
+.main-content > h3 {
+    margin-bottom: 1%;
+}
 </style>

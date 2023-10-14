@@ -1,7 +1,7 @@
 <template>
        <navBar class="nav-bar" />
   
-       <v-main class="rounded-lg ma-4">
+       <v-main class="rounded-lg ma-4" v-if="$vuetify.display.lgAndUp">
         <v-row>
             <v-col cols="12">
                 <div class="main-content">
@@ -10,6 +10,30 @@
                     <div class="main-info-display">
                         <h3 class="text-center">My Patients</h3>
                         <p class="text-center">(click on each patient for more details)</p>
+
+                        <div v-if="patientList.length > 0">
+                            <v-list lines="two" class="rounded-lg">
+                                <v-list-item v-for="patient in patientList" :key="patient._id" class="custom-list-item" :to="'/my-patients/'+ patient._id">
+                                    <h3>{{ patient.name }}</h3>
+                                    <p>Date of birth: {{ $moment(patient.dateOfBirth).format('DD-MM-YYYY') }}</p>
+                                </v-list-item>
+                            </v-list>
+                        </div>
+                    </div>
+                </div>
+            </v-col>
+        </v-row>
+    </v-main>
+
+    <!-- mobile view -->
+    <v-main class="rounded-lg ma-4" v-if="$vuetify.display.mobile">
+        <v-row>
+            <v-col cols="12">
+                <div class="main-content">
+                    <h1 class="mobile-header">Patient Bookr</h1>
+
+                    <div class="main-info-display">
+                        <h3 class="text-center mobile-h3">My Patients</h3>
 
                         <div v-if="patientList.length > 0">
                             <v-list lines="two" class="rounded-lg">

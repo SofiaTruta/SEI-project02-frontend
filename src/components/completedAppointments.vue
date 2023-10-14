@@ -1,7 +1,7 @@
 <template>
     <navBar class="nav-bar" />
 
-    <v-main class="rounded-lg ma-4">
+    <v-main class="rounded-lg ma-4" v-if="$vuetify.display.lgAndUp">
         <v-row>
             <v-col cols="12">
                     <div class="main-content">
@@ -17,7 +17,7 @@
                                         :to="'/appointments/' + appointment._id">
                                         <v-row align="center">
                                             <v-col cols="8">
-                                                <h4>{{ $moment(appointment.date).format('DD/MM/YYYY') }}</h4>
+                                                <h4>{{ $moment(appointment.date).format('DD-MM-YYYY') }}</h4>
                                                 <h4>{{ appointment.time }}</h4>
                                                 <p>Patient Name: {{ appointment?.patientDetails?.name }}</p>
                                             </v-col>
@@ -36,6 +36,43 @@
             </v-col>
         </v-row>
     </v-main>
+
+    <!-- view for mobile -->
+    <v-main class="rounded-lg ma-4" v-if="$vuetify.display.mobile">
+        <v-row>
+            <v-col cols="12">
+                    <div class="main-content">
+                        <h1 class="mobile-header">Patient Bookr</h1>
+
+                        <div class="main-info-display">
+                            <h3 class="text-center mobile-h3">Completed Appointments</h3>
+
+                            <div v-if="pastAppointments">
+                                <v-list lines="two" class="rounded-lg">
+                                    <v-list-item v-for="appointment in pastAppointments" :key="appointment._id"
+                                        :to="'/appointments/' + appointment._id">
+                                        <v-row align="center">
+                                            <v-col cols="8">
+                                                <h4>{{ $moment(appointment.date).format('DD-MM-YYYY') }}</h4>
+                                                <h4>{{ appointment.time }}</h4>
+                                                <p>Name: {{ appointment?.patientDetails?.name }}</p>
+                                            </v-col>
+
+                                            <v-col cols="4" class="text-right">
+                                                <v-btn class="ma-2" @click="deleteAppointment(appointment._id, $event)">
+                                                    <v-icon class="square-icon" icon="mdi-trash-can"></v-icon>
+                                                </v-btn>
+                                            </v-col>
+                                        </v-row>
+                                    </v-list-item>
+                                </v-list>
+                            </div>
+                        </div>
+                    </div>
+            </v-col>
+        </v-row>
+    </v-main>
+
 </template>
 
 <script>

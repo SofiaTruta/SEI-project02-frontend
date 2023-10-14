@@ -15,7 +15,7 @@
                                 <v-list lines="two" class="rounded-lg">
                                     <v-list-item v-for="appointment in professionalData.appointments" :key="appointment._id"
                                         :to="'/appointments/' + appointment._id" class="custom-list-item">
-                                        <h4>{{ $moment(appointment.date).format('DD/MM/YYYY') }}</h4>
+                                        <h4>{{ $moment(appointment.date).format('DD-MM-YYYY') }}</h4>
                                         <h4>{{ appointment.time }}</h4>
                                         <p>Patient Name: {{ appointment?.patientDetails?.name }}</p>
                                         <p>Status: {{ appointment?.status }}</p>
@@ -33,18 +33,18 @@
         <v-row>
             <v-col cols="12">
                 <div class="main-content">
-                    <h1 class="header">Patient Bookr</h1>
+                    <h1 class="mobile-header">Patient Bookr</h1>
 
                     <div class="main-info-display">
-                        <h3 class="text-center">Upcoming Appointments</h3>
+                        <h3 class="text-center mobile-h3">Upcoming Appointments</h3>
 
                             <div v-if="professionalData.appointments">
                                 <v-list lines="two" class="rounded-lg">
                                     <v-list-item v-for="appointment in professionalData.appointments" :key="appointment._id"
                                         :to="'/appointments/' + appointment._id" class="custom-list-item">
-                                        <h4>{{ $moment(appointment.date).format('DD/MM/YYYY') }}</h4>
+                                        <h4>{{ $moment(appointment.date).format('DD-MM-YYYY') }}</h4>
                                         <h4>{{ appointment.time }}</h4>
-                                        <p>Patient Name: {{ appointment?.patientDetails?.name }}</p>
+                                        <p>Name: {{ appointment?.patientDetails?.name }}</p>
                                         <p>Status: {{ appointment?.status }}</p>
                                     </v-list-item>
                                 </v-list>
@@ -161,7 +161,7 @@ export default {
                 try {
                     const response = await fetch(PROFESSIONALS_API);
                     const result = await response.json();
-                    console.log(result)
+                   
                     allProfessionals = result.allProfessionals;
                     allAppointments = result.allAppointments
 

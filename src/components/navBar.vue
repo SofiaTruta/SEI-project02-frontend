@@ -147,12 +147,10 @@ export default {
         },
 
         closeDialog(data) {
-            // console.log(data)
             this.showNewAppointment = false
             this.$emit('update-component', data)
         },
         cancelNewAppointment() {
-            console.log('received emit!')
             this.showNewAppointment = false
         },
         goToHome() {
