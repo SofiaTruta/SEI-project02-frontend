@@ -87,11 +87,11 @@
 </template>
 
 <script>
-// import logOutButton from './logOutButton.vue'
+
 import newAppointment from './newAppointment.vue'
 import { googleLogout } from 'vue3-google-login';
 
-const PROFESSIONALS_API = 'http://localhost:4000/professionals'
+const PROFESSIONALS_API = `${process.env.VUE_APP_BACKEND_CONNECTION}/professionals`
 
 export default {
     name: 'navBar',

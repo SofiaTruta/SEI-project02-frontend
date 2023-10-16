@@ -38,7 +38,7 @@
 </template>
 
 <script>
-const NEW_APPOINTMENT_API = 'http://localhost:4000/appointments/add-new-appointment'
+const NEW_APPOINTMENT_API = `${process.env.VUE_APP_BACKEND_CONNECTION}/appointments/add-new-appointment`
 
 export default {
     name: 'newAppointment',

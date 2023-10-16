@@ -60,9 +60,9 @@
 <script>
 import navBar from './navBar.vue'
 
-const PROFESSIONALS_API = 'http://localhost:4000/professionals'
-const DELETE_APPT_API = 'http://localhost:4000/appointments'
-const UPDATE_APPT_STATUS_API = 'http://localhost:4000/update-appointment-status'
+const PROFESSIONALS_API = `${process.env.VUE_APP_BACKEND_CONNECTION}/professionals`
+const DELETE_APPT_API = `${process.env.VUE_APP_BACKEND_CONNECTION}/appointments`
+const UPDATE_APPT_STATUS_API = `${process.env.VUE_APP_BACKEND_CONNECTION}/update-appointment-status`
 
 
 export default {

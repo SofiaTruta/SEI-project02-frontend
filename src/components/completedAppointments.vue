@@ -78,8 +78,8 @@
 <script>
 import navBar from './navBar.vue'
 
-const DELETE_APPT_API = 'http://localhost:4000/appointments'
-const PROFESSIONALS_API = 'http://localhost:4000/professionals'
+const DELETE_APPT_API = `${process.env.VUE_APP_BACKEND_CONNECTION}/appointments`
+const PROFESSIONALS_API = `${process.env.VUE_APP_BACKEND_CONNECTION}/professionals`
 
 export default {
     name: 'completedAppointments',

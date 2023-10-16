@@ -83,9 +83,9 @@ import { useRoute } from 'vue-router';
 import navBar from './navBar.vue'
 import editAppointment from './editAppointment.vue'
 
-const DATA_API = 'http://localhost:4000/appointments'
-const DELETE_APPT_API = 'http://localhost:4000/appointments'
-const UPDATE_APPT_API = 'http://localhost:4000/update-appointment-status'
+const DATA_API = `${process.env.VUE_APP_BACKEND_CONNECTION}/appointments`
+const DELETE_APPT_API = `${process.env.VUE_APP_BACKEND_CONNECTION}/appointments`
+const UPDATE_APPT_API = `${process.env.VUE_APP_BACKEND_CONNECTION}/update-appointment-status`
 
 
 export default {

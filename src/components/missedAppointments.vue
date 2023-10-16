@@ -65,7 +65,7 @@
 
 import navBar from './navBar.vue';
 
-const PROFESSIONALS_API = 'http://localhost:4000/professionals'
+const PROFESSIONALS_API = `${process.env.VUE_APP_BACKEND_CONNECTION}/professionals`
 
 export default {
     name: 'missedAppointments',

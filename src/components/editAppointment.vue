@@ -39,7 +39,7 @@
 
 <script>
 
-const EDIT_APPT_API = 'http://localhost:4000/appointments/edit-appointment'
+const EDIT_APPT_API = `${process.env.VUE_APP_BACKEND_CONNECTION}/appointments/edit-appointment`
 
 export default {
     name: 'editAppointment',

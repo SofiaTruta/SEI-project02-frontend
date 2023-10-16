@@ -43,7 +43,7 @@
 <script>
 import { useRoute } from 'vue-router';
 import navBar from './navBar.vue'
-const DATA_API = 'http://localhost:4000/my-patients'
+const DATA_API = `${process.env.VUE_APP_BACKEND_CONNECTION}/my-patients`
 
 export default {
     name: 'singlePatient',

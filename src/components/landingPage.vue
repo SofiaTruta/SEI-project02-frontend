@@ -42,7 +42,7 @@
 <script>
 import { decodeCredential, googleLogout } from 'vue3-google-login'
 
-const DATA_URL = 'http://localhost:4000/professionals/login'
+const DATA_URL = `${process.env.VUE_APP_BACKEND_CONNECTION}/professionals/login`
 
 export default {
     name: 'landingPage',
