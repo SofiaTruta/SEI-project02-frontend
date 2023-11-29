@@ -98,7 +98,7 @@ Obstacles:
 - Created the main page view, which dynamically accesses information from the database. 
 - Added functionality for deleting and editing appointment.
 
-Here is a code snippet for my Appointment Schema:
+Here is a code snippet for my Appointment Schema, which details referencing between the patient Schema and the professional Schema too, making sure we can trace a connection between them, as well as which options the status can have:
 
 ```
 const appointmentSchema = new Schema({
